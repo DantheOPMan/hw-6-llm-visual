@@ -1,4 +1,3 @@
-// src/App.js
 import React, { useState } from "react";
 import FileUpload from "./components/FileUpload";
 import Streamgraph from "./components/Streamgraph";
@@ -16,7 +15,7 @@ function App() {
         <div
           style={{
             display: "flex",
-            alignItems: "center", // Center items vertically
+            alignItems: "center",
             marginTop: 20,
           }}
         >

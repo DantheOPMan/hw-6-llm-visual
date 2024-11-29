@@ -1,4 +1,3 @@
-// src/components/FileUpload.js
 import React, { Component } from 'react';
 
 class FileUpload extends Component {
@@ -48,9 +47,8 @@ class FileUpload extends Component {
         obj[header] = currentLine[index];
       });
 
-      // Keep the Date as a string
       const parsedObj = {
-        Date: obj.Date, // Keep as string
+        Date: obj.Date,
         "GPT-4": parseInt(obj["GPT-4"], 10) || 0,
         "Gemini": parseInt(obj["Gemini"], 10) || 0,
         "PaLM-2": parseInt(obj["PaLM-2"], 10) || 0,

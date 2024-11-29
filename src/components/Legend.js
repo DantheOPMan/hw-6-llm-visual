@@ -1,4 +1,3 @@
-// src/components/Legend.js
 import React from 'react';
 
 function Legend() {

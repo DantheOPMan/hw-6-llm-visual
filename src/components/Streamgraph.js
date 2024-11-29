@@ -1,4 +1,3 @@
-// src/components/Streamgraph.js
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
@@ -7,15 +6,12 @@ function Streamgraph({ data }) {
   const tooltipRef = useRef();
 
   useEffect(() => {
-    // Dimensions
     const margin = { top: 20, right: 0, bottom: 30, left: 50 };
-    const width = 400 - margin.left - margin.right; // Reduced width from 800 to 600
+    const width = 400 - margin.left - margin.right;
     const height = 500 - margin.top - margin.bottom;
 
-    // Clear any existing content
     d3.select(svgRef.current).selectAll("*").remove();
 
-    // Set up svg
     const svg = d3.select(svgRef.current)
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom);
@@ -23,7 +19,6 @@ function Streamgraph({ data }) {
     const g = svg.append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // Parse data
     const parseDate = d3.timeParse("%Y-%m-%d");
 
     data.forEach(d => {
@@ -35,19 +30,16 @@ function Streamgraph({ data }) {
     const keys = ["GPT-4", "Gemini", "PaLM-2", "Claude", "LLaMA-3.1"];
     const colors = ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00"];
 
-    // Scales
     const xScale = d3.scaleTime()
       .domain(d3.extent(data, d => d.Date))
       .range([0, width]);
 
-    // Stack the data
     const stack = d3.stack()
       .keys(keys)
-      .offset(d3.stackOffsetWiggle); // Use 'wiggle' for more extreme look
+      .offset(d3.stackOffsetWiggle);
 
     const stackedData = stack(data);
 
-    // Y scale domain
     const yExtent = [
       d3.min(stackedData, layer => d3.min(layer, d => d[0])),
       d3.max(stackedData, layer => d3.max(layer, d => d[1]))
@@ -57,14 +49,12 @@ function Streamgraph({ data }) {
       .domain(yExtent)
       .range([height, 0]);
 
-    // Area generator
     const area = d3.area()
       .x(d => xScale(d.data.Date))
       .y0(d => yScale(d[0]))
       .y1(d => yScale(d[1]))
-      .curve(d3.curveBasis); // Smooth curves
+      .curve(d3.curveBasis);
 
-    // Draw layers
     const layers = g.selectAll(".layer")
       .data(stackedData)
       .enter().append("path")
@@ -79,7 +69,6 @@ function Streamgraph({ data }) {
         hideTooltip();
       });
 
-    // Axes
     const xAxis = d3.axisBottom(xScale)
       .ticks(d3.timeMonth.every(1))
       .tickFormat(d3.timeFormat("%b"));
@@ -89,7 +78,6 @@ function Streamgraph({ data }) {
       .attr("transform", `translate(0, ${height})`)
       .call(xAxis);
 
-    // Tooltip functions (remain unchanged)
     function showTooltip(event, model) {
       const tooltip = d3.select(tooltipRef.current);
       tooltip.style("display", "block")
@@ -107,7 +95,7 @@ function Streamgraph({ data }) {
 
     function drawMiniBarChart(model) {
       const tooltip = d3.select(tooltipRef.current);
-      tooltip.selectAll("*").remove(); // Clear previous content
+      tooltip.selectAll("*").remove();
 
       const miniWidth = 200;
       const miniHeight = 150;
@@ -129,7 +117,6 @@ function Streamgraph({ data }) {
         .domain([0, d3.max(data, d => d[model])])
         .range([miniHeight - miniMargin.top - miniMargin.bottom, 0]);
 
-      // Add axes
       miniG.append("g")
         .attr("transform", `translate(0, ${miniHeight - miniMargin.top - miniMargin.bottom})`)
         .call(d3.axisBottom(miniXScale).tickFormat(d3.timeFormat("%b")));
@@ -137,7 +124,6 @@ function Streamgraph({ data }) {
       miniG.append("g")
         .call(d3.axisLeft(miniYScale));
 
-      // Add bars
       miniG.selectAll(".bar")
         .data(data)
         .enter().append("rect")
