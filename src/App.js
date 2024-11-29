@@ -1,23 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React, { useState } from "react";
+import FileUpload from "./components/FileUpload";
+import Streamgraph from "./components/Streamgraph";
+import Legend from "./components/Legend";
+import "./App.css";
 
 function App() {
+  const [data, setData] = useState(null);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <FileUpload set_data={setData} />
+
+      {data && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center", // Center items vertically
+            marginTop: 20,
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          <Streamgraph data={data} />
+          <Legend />
+        </div>
+      )}
     </div>
   );
 }
